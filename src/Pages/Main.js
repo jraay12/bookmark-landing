@@ -12,19 +12,26 @@ import arrow from "../image/icon-arrow.svg";
 import { useEffect, useState } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import facebook from "../image/icon-facebook.svg";
+import twitter from "../image/icon-twitter.svg";
 
 export default function Main() {
   const [openStates, setOpenStates] = useState(Array(4).fill(false)); // Initialize open states for 4 FAQ items
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 2000 });
+    setOpen(false);
   }, []);
 
+  const openBurger = () => {
+    setOpen(!open);
+    console.log(open);
+  };
   const handleOpen = (index) => {
-    const newOpenStates = [...openStates]; // Create a copy of the open states array
-    newOpenStates[index] = !newOpenStates[index]; // Toggle the state of the clicked FAQ item
-    setOpenStates(newOpenStates); // Update the open states array
-    console.log(newOpenStates); // Log the updated open states array
+    const newOpenStates = [...openStates];
+    newOpenStates[index] = !newOpenStates[index];
+    setOpenStates(newOpenStates);
   };
   const data = [
     {
@@ -72,7 +79,18 @@ export default function Main() {
   return (
     <main className="container min-h-screen mx-auto relative select-none overflow-x-hidden ">
       <header className="flex items-center justify-between  px-10 py-5">
-        <img src={Logo} />
+        <img src={Logo} className={`${open && "hidden"}`} />
+        <button
+          className={`sm:hidden ${open && "hidden"}`}
+          onClick={openBurger}
+        >
+          &#9776;
+        </button>
+        {open && (
+          <div className="sm:hidden inset-0 absolute bg-VeryDarkBlue opacity-90 p-4">
+            <img src={Logo} className="invert hue-rotate-180 " />
+          </div>
+        )}
         <ul className="hidden sm:flex space-x-10 text-black font-medium text-[15px]">
           <li className="inline-block hover:text-SoftRed hover:cursor-pointer">
             FEATURES
@@ -360,15 +378,37 @@ export default function Main() {
         <h1 className="text-xl text-white font-medium text-center">
           Stay up-to-date with what <br></br>we’re doing
         </h1>
-        <div className="space-x-4">
+        <div className="flex flex-col sm:flex-row gap-2 max-w-lg justify-center items-center ">
           <input
             placeholder="Enter your email address"
             type="email"
-            className=" outline-none px-2 h-10 inline-block rounded-md placeholder:text-[.7rem] invalid:border-SoftRed border"
+            className=" outline-none px-2 h-10 inline-block rounded-md xs:w-full placeholder:text-[.7rem] invalid:border-SoftRed border"
           />
-          <button className="text-white bg-SoftRed px-5  rounded-md py-2 inline-block">
+          <button className="text-white bg-SoftRed sm:px-5 w-full rounded-md py-2 inline-block">
             Contact Us
           </button>
+        </div>
+      </footer>
+      <footer className="flex flex-col sm:flex-row items-center px-20 w-full h-max pb-10 pt-10 bg-VeryDarkBlue gap-10">
+        <img src={Logo} className="hue-rotate-180 invert" />
+        <ul className="flex flex-col sm:flex-row gap-7 text-white text-[14px]">
+          <li className="sm:inline-block block  hover:text-SoftRed hover:cursor-pointer">
+            FEATURES
+          </li>
+          <li className="sm:inline-block block hover:text-SoftRed hover:cursor-pointer">
+            PRICING
+          </li>
+          <li className="sm:inline-block block hover:text-SoftRed hover:cursor-pointer">
+            CONTACT
+          </li>
+        </ul>
+        <div className="flex-grow"></div>
+        <div className="flex justify-center items-center gap-6">
+          <img
+            src={facebook}
+            className="hover:cursor-pointer hover:bg-SoftRed"
+          />
+          <img src={twitter} className="hover:cursor-pointer " />
         </div>
       </footer>
     </main>
